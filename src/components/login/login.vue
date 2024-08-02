@@ -1,35 +1,47 @@
 <template>
   <div class="login-wrapper">
-    <img :src="logo" width="50" height="50" style="border-radius: 5px;margin-bottom:12px;"/>
+    <img
+      :src="logo"
+      width="50"
+      height="50"
+      style="border-radius: 5px; margin-bottom: 12px"
+    />
     <el-select v-model="userID">
-      <el-option v-for="index in 30" :key="index" :label="`user${index-1}`" :value="`user${index-1}`"></el-option>
+      <el-option
+        v-for="index in 30"
+        :key="index"
+        :label="`user${index - 1}`"
+        :value="`user${index - 1}`"
+      ></el-option>
     </el-select>
-    <br>
-    <el-button type="primary" @click="login" style="width:100%;">登录</el-button>
+    <br />
+    <el-button type="primary" @click="login" style="width: 100%"
+      >login</el-button
+    >
   </div>
 </template>
 
 <script>
-import { Select, Option } from 'element-ui'
-import logo from '../../assets/image/logo.png'
+import { Select, Option } from 'element-ui';
+import logo from '../../assets/image/logo.png';
 export default {
   name: 'Login',
   components: {
     ElSelect: Select,
-    ElOption: Option
+    ElOption: Option,
   },
   data() {
     return {
       userID: 'user0',
-      logo: logo
-    }
+      logo: logo,
+    };
   },
   methods: {
     login() {
-      this.$store.dispatch('login', this.userID)
-    }
-  }
-}
+      this.$store.dispatch('login', this.userID);
+    },
+  },
+};
 </script>
 
 <style lang="stylus" scoped>
