@@ -6,7 +6,7 @@
       :rules="rules"
       :model="form"
       label-width="0"
-      style="width:100%;"
+      style="width: 100%"
       @keydown.enter.native="submit"
     >
       <!-- Github登录方式 -->
@@ -15,8 +15,8 @@
           <el-option
             v-for="index in 30"
             :key="index"
-            :label="`user${index-1}`"
-            :value="`user${index-1}`"
+            :label="`user${index - 1}`"
+            :value="`user${index - 1}`"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -37,16 +37,17 @@
     <el-button
       type="primary"
       @click="submit"
-      style="width:100%; margin-top: 6px;"
+      style="width: 100%; margin-top: 6px"
       :loading="loading"
-    >登录2</el-button>
+      >login</el-button
+    >
   </div>
 </template>
 
 <script>
-import { Form, FormItem, Select, Option } from 'element-ui'
-import logo from '../../assets/image/logo.png'
-import { postMessageHandle } from '@/utils'
+import { Form, FormItem, Select, Option } from 'element-ui';
+import logo from '../../assets/image/logo.png';
+import { postMessageHandle } from '@/utils';
 export default {
   name: 'Login',
   components: {
@@ -58,75 +59,78 @@ export default {
   data() {
     const checkUserID = (rule, value, callback) => {
       if (!/^[a-zA-Z][a-zA-Z0-9_]{3,23}$/.test(value)) {
-        callback(new Error('不合法（字母开头+字母/数字，长度4-24)'))
+        callback(new Error('不合法（字母开头+字母/数字，长度4-24)'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
     return {
       form: {
         userID: 'user0',
-        password: ''
+        password: '',
       },
       rules: {
         userID: [
           { required: true, message: '请输入 userID', trigger: 'blur' },
-          { validator: checkUserID, trigger: 'blur' }
+          { validator: checkUserID, trigger: 'blur' },
         ],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
       },
       logo: logo,
       registerVisible: false,
-      loading: false
-    }
+      loading: false,
+    };
   },
   methods: {
     submit() {
-      this.$refs['login'].validate(valid => {
+      this.$refs['login'].validate((valid) => {
         if (valid) {
-          this.login()
+          this.login();
         }
-      })
+      });
     },
     login() {
       const messageData = {
         type: 'login',
         userID: this.form.userID,
-      }
-      postMessageHandle(messageData)
-      this.loading = true
+      };
+      postMessageHandle(messageData);
+      this.loading = true;
       this.tim
         .login({
           userID: this.form.userID,
-          userSig: window.genTestUserSig(this.form.userID).userSig
+          userSig: window.genTestUserSig(this.form.userID).userSig,
         })
         .then(() => {
-          this.loading = false
-          this.$store.commit('toggleIsLogin', true)
-          this.$store.commit('startComputeCurrent')
-          this.$store.commit('showMessage', { type: 'success', message: '登录成功' })
+          this.loading = false;
+          this.$store.commit('toggleIsLogin', true);
+          this.$store.commit('startComputeCurrent');
+          this.$store.commit('showMessage', {
+            type: 'success',
+            message: '登录成功',
+          });
           this.$store.commit({
             type: 'GET_USER_INFO',
             userID: this.form.userID,
             userSig: window.genTestUserSig(this.form.userID).userSig,
-            sdkAppID: window.genTestUserSig('').SDKAppID
-          })
+            sdkAppID: window.genTestUserSig('').SDKAppID,
+          });
           this.$store.commit('showMessage', {
             type: 'success',
-            message: '登录成功'
-          })
+            message: '登录成功',
+          });
         })
-        .catch(error => {
-          this.loading = false
+        .catch((error) => {
+          this.loading = false;
           this.$store.commit('showMessage', {
             message: '登录失败：' + error.message,
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="stylus" scoped>
